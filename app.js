@@ -45,6 +45,8 @@ const SMUFL_G_CLEF = "\uE050";
 const SMUFL_F_CLEF = "\uE062";
 const SMUFL_WHOLE_NOTE = "\uE0A2";
 const SMUFL_STAFF_5_LINES_WIDE = "\uE01A";
+const AUTO_ADVANCE_CORRECT_DELAY_MS = 500;
+const AUTO_ADVANCE_WRONG_DELAY_MS = 1500;
 const STAFF_OCTAVE_MARKS = [
   { label: "8va", shift: 12, placement: "above", clefs: ["treble"] },
   { label: "15ma", shift: 24, placement: "above", clefs: ["treble"] },
@@ -61,6 +63,7 @@ const state = {
   solfegeMap: null,
   answered: false,
   streak: 0,
+  autoAdvanceTimer: null,
 };
 
 const el = {
@@ -81,6 +84,7 @@ const el = {
   advanced: document.getElementById("advancedToggle"),
   review: document.getElementById("reviewToggle"),
   octaveMarks: document.getElementById("octaveMarksToggle"),
+  autoAdvance: document.getElementById("autoAdvanceToggle"),
 };
 
 function modulo(value, size) {
@@ -775,12 +779,19 @@ function currentSettings() {
     answerMode: document.querySelector("input[name='answerMode']:checked").value,
     advanced: el.advanced.checked,
     review: el.review.checked,
+    autoAdvance: el.autoAdvance.checked,
     notationSystem: document.querySelector("input[name='notationSystem']:checked").value,
     solfegeMapMode: document.querySelector("input[name='solfegeMapMode']:checked").value,
     octaveMarks: el.octaveMarks.checked,
     staffRange: document.querySelector("input[name='staffRange']:checked").value,
     readNoteFormat: document.querySelector("input[name='readNoteFormat']:checked").value,
   };
+}
+
+function clearAutoAdvanceTimer() {
+  if (!state.autoAdvanceTimer) return;
+  window.clearTimeout(state.autoAdvanceTimer);
+  state.autoAdvanceTimer = null;
 }
 
 function syncPracticeControls() {
@@ -922,6 +933,7 @@ function renderBlackLabels(x, semitone, advanced, isTarget) {
 }
 
 function newQuestion() {
+  clearAutoAdvanceTimer();
   syncPracticeControls();
   const { practiceMode, answerMode, advanced, review, notationSystem, solfegeMapMode, staffRange, readNoteFormat, octaveMarks } = currentSettings();
   state.target = randomTarget();
@@ -1414,7 +1426,7 @@ function isCorrectChoice(choice) {
 function gradeChoice(choice) {
   if (!state.target || state.answered) return;
 
-  const { practiceMode } = currentSettings();
+  const { practiceMode, autoAdvance } = currentSettings();
   const ok = isCorrectChoice(choice);
   state.answered = true;
   updateScore(ok);
@@ -1429,6 +1441,14 @@ function gradeChoice(choice) {
 
   el.feedback.className = `feedback ${ok ? "good" : "bad"}`;
   renderChoices(choice);
+
+  if (autoAdvance) {
+    clearAutoAdvanceTimer();
+    state.autoAdvanceTimer = window.setTimeout(() => {
+      state.autoAdvanceTimer = null;
+      newQuestion();
+    }, ok ? AUTO_ADVANCE_CORRECT_DELAY_MS : AUTO_ADVANCE_WRONG_DELAY_MS);
+  }
 }
 
 function gradeTypedAnswer() {
@@ -1517,6 +1537,9 @@ el.typedAnswer.addEventListener("submit", (event) => {
 });
 el.advanced.addEventListener("change", refresh);
 el.octaveMarks.addEventListener("change", refresh);
+el.autoAdvance.addEventListener("change", () => {
+  if (!el.autoAdvance.checked) clearAutoAdvanceTimer();
+});
 el.review.addEventListener("change", () => {
   renderKeyboard();
   renderSolfegeMap();

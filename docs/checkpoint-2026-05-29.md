@@ -256,6 +256,14 @@
 - Added `.nojekyll` for plain static GitHub Pages serving.
 - Added `DEPLOY.md` for serving the separate `note_trainer` repository at `https://yuyangyy.com/note_trainer/`, assuming `yuyangyy.com` is already configured on the GitHub Pages user site.
 
+## 2026-06-07 Multiple Choice Auto-Advance
+
+- Added an `Auto-advance` toggle in the main controls.
+- When enabled, multiple-choice answers still show correct/wrong feedback and highlighted answer buttons, then automatically move to the next question after 0.5 seconds for correct answers or 1.5 seconds for incorrect answers.
+- Auto-advance applies to `Name the key`, `Name + group`, and `Read notes` when `Read format` is `Multiple choice`.
+- When disabled, multiple-choice mode keeps the previous behavior: learners press `Next` or Enter after seeing feedback.
+- Manual `Next` remains available during the feedback pause and cancels the pending automatic move.
+
 ## Verification
 
 - Ran a JavaScript syntax check on `app.js`.
@@ -274,6 +282,8 @@
 - Confirmed `Read notes` with a local smoke test: write mode generated 8 staff notes with a `Check` flow, and multiple-choice mode generated one note with 4 choices.
 - Confirmed updated `Read notes` review behavior with a local smoke test: `Both` range generated 30 natural notes across 2 clef rows, no answer inputs, and a normal `Next` flow.
 - Confirmed anchored clef rendering with a local numeric smoke check: treble G4 line at y=112 and bass F3 line at y=76 are used as the SVG clef anchors.
+- Confirmed `Auto-advance` off keeps multiple-choice feedback visible until `Next` or Enter.
+- Confirmed `Auto-advance` on moves to a fresh multiple-choice question after the shorter correct-answer pause and longer wrong-answer pause, including `Read notes` multiple-choice format.
 
 ## Follow-Up Ideas
 
