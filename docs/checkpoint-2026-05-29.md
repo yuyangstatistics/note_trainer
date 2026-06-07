@@ -263,6 +263,7 @@
 - Auto-advance applies to `Name the key`, `Name + group`, and `Read notes` when `Read format` is `Multiple choice`.
 - When disabled, multiple-choice mode keeps the previous behavior: learners press `Next` or Enter after seeing feedback.
 - Manual `Next` remains available during the feedback pause and cancels the pending automatic move.
+- Versioned the `app.js` script URL so GitHub Pages visitors do not keep running a browser-cached pre-auto-advance script.
 
 ## Verification
 
