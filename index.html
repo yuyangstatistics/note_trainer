@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Piano Note Trainer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <h1>Piano Note Trainer</h1>
+        </div>
+        <div class="score" aria-live="polite">
+          <span id="streak">0</span>
+          <span>streak</span>
+        </div>
+      </header>
+
+      <section class="controls" aria-label="Practice settings">
+        <fieldset>
+          <legend>Practice</legend>
+          <div class="segmented">
+            <label>
+              <input type="radio" name="practiceMode" value="name-key" checked />
+              <span>Name the key</span>
+            </label>
+            <label>
+              <input type="radio" name="practiceMode" value="click-key" />
+              <span>Click the key</span>
+            </label>
+            <label>
+              <input type="radio" name="practiceMode" value="group-name" />
+              <span>Name + group</span>
+            </label>
+            <label>
+              <input type="radio" name="practiceMode" value="intervals" />
+              <span>Steps</span>
+            </label>
+            <label>
+              <input type="radio" name="practiceMode" value="solfege" />
+              <span>Solfege</span>
+            </label>
+            <label>
+              <input type="radio" name="practiceMode" value="solfege-map" />
+              <span>Solfege Map</span>
+            </label>
+            <label>
+              <input type="radio" name="practiceMode" value="read-notes" />
+              <span>Read notes</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Keys</legend>
+          <div class="segmented">
+            <label>
+              <input type="radio" name="keyPool" value="mixed" checked />
+              <span>Mixed</span>
+            </label>
+            <label>
+              <input type="radio" name="keyPool" value="white" />
+              <span>White</span>
+            </label>
+            <label>
+              <input type="radio" name="keyPool" value="black" />
+              <span>Black</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Notation</legend>
+          <div class="segmented">
+            <label>
+              <input type="radio" name="notationSystem" value="scientific" checked />
+              <span>Scientific</span>
+            </label>
+            <label>
+              <input type="radio" name="notationSystem" value="helmholtz" />
+              <span>Helmholtz</span>
+            </label>
+            <label>
+              <input type="radio" name="notationSystem" value="mixed" />
+              <span>Mixed</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Answer</legend>
+          <div class="segmented">
+            <label>
+              <input type="radio" name="answerMode" value="choice" checked />
+              <span>Multiple choice</span>
+            </label>
+            <label>
+              <input type="radio" name="answerMode" value="type" />
+              <span>Type answer</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Map</legend>
+          <div class="segmented">
+            <label>
+              <input type="radio" name="solfegeMapMode" value="number-note" checked />
+              <span>1 to note</span>
+            </label>
+            <label>
+              <input type="radio" name="solfegeMapMode" value="note-number" />
+              <span>Note to 1</span>
+            </label>
+            <label>
+              <input type="radio" name="solfegeMapMode" value="sequence" />
+              <span>Sequence</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Staff range</legend>
+          <div class="segmented">
+            <label>
+              <input type="radio" name="staffRange" value="high" checked />
+              <span>High</span>
+            </label>
+            <label>
+              <input type="radio" name="staffRange" value="low" />
+              <span>Low</span>
+            </label>
+            <label>
+              <input type="radio" name="staffRange" value="both" />
+              <span>Both</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Read format</legend>
+          <div class="segmented">
+            <label>
+              <input type="radio" name="readNoteFormat" value="write" checked />
+              <span>Write names</span>
+            </label>
+            <label>
+              <input type="radio" name="readNoteFormat" value="choice" />
+              <span>Multiple choice</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <label class="toggle">
+          <input id="advancedToggle" type="checkbox" />
+          <span>Advanced names</span>
+        </label>
+
+        <label class="toggle">
+          <input id="octaveMarksToggle" type="checkbox" />
+          <span>Octave marks</span>
+        </label>
+
+        <label class="toggle">
+          <input id="reviewToggle" type="checkbox" />
+          <span>Review labels</span>
+        </label>
+      </section>
+
+      <section class="board" aria-label="Piano keyboard">
+        <p id="prompt">Choose a mode, then press Next.</p>
+        <p id="hint" class="hint" hidden></p>
+        <div id="keyboard" class="keyboard"></div>
+        <div id="intervalQuiz" class="interval-quiz" hidden></div>
+        <div id="solfegeMap" class="solfege-map" hidden></div>
+        <div id="staffQuiz" class="staff-quiz" hidden></div>
+        <div id="solfegePanel" class="solfege-panel" hidden>
+          <h2>Solfege voice trainer</h2>
+          <p>Launch the local Whisper trainer, then use its recorder for 1-7 or do-re-mi practice.</p>
+          <a class="launch-link" href="http://127.0.0.1:7860" target="_blank" rel="noreferrer">Open Solfege Trainer</a>
+          <p class="solfege-command">Run: python3 solfege_training_whisper.py</p>
+        </div>
+      </section>
+
+      <section class="answer-panel">
+        <div id="choices" class="choices" aria-label="Answer choices"></div>
+        <form id="typedAnswer" class="typed-answer" hidden>
+          <input id="answerInput" type="text" autocomplete="off" spellcheck="false" aria-label="Typed answer" />
+          <button id="submitAnswer" class="submit-button" type="submit">Submit</button>
+        </form>
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+        <button id="nextButton" class="next-button" type="button">Next</button>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
