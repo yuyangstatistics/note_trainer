@@ -250,6 +250,12 @@
 - Made dense practice surfaces mobile-friendly with horizontal touch scrolling: piano keyboards, staff notation rows, staff review rows, and solfege map review tables.
 - Increased mobile touch target sizes and adjusted mobile grids for choices, typed answers, interval cards, and solfege sequence inputs.
 
+## 2026-06-07 GitHub Pages `/note_trainer/` Deployment
+
+- Confirmed app asset references are relative, so the same files work in a separate GitHub Pages project repo named `note_trainer`.
+- Added `.nojekyll` for plain static GitHub Pages serving.
+- Added `DEPLOY.md` for serving the separate `note_trainer` repository at `https://yuyangyy.com/note_trainer/`, assuming `yuyangyy.com` is already configured on the GitHub Pages user site.
+
 ## Verification
 
 - Ran a JavaScript syntax check on `app.js`.
